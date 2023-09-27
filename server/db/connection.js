@@ -1,21 +1,28 @@
-const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config/config.env" });
 
-const DB = process.env.DATABASE_URL.replace(
+const { MongoClient } = require("mongodb");
+
+const DBUrl = process.env.DATABASE_URL.replace(
   "<password>",
   process.env.DATABASE_PASSWORD
 );
+const dbName = process.env.DATABASE;
+const client = new MongoClient(DBUrl);
 
-const dbConnection = () =>
-  mongoose
-    .connect(DB, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then((con) => {
-      console.log("Database connection success!");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+async function connect() {
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    console.log("Connected to MongoDB");
 
-module.exports = dbConnection;
+    const collection = db.collection("user");
+
+    return collection;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    throw error;
+  }
+}
+
+module.exports = connect;
