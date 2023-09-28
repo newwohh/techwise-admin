@@ -1,7 +1,19 @@
+import { Route, Routes } from "react-router-dom";
+import WebDrawer from "./components/Drawer/WebDrawer";
+import Product from "./pages/Product";
+import User from "./pages/User";
+import Seller from "./pages/Seller";
+
 function App() {
   return (
     <>
-      <h1>Hello world</h1>
+      <WebDrawer>
+        <Routes>
+          <Route path="/products" element={<Product />} />
+          <Route path="/users" element={<User />} />
+          <Route path="/sellers" element={<Seller />} />
+        </Routes>
+      </WebDrawer>
     </>
   );
 }
