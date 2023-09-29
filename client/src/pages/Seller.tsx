@@ -10,10 +10,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { Box } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import NewSellerForm from "../components/NewSellerForm";
 import ViewSeller from "../components/ViewSeller";
+import CheckCircleOutlineTwoToneIcon from "@mui/icons-material/CheckCircleOutlineTwoTone";
+import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 
 interface SellerAddress {
   city: string;
@@ -36,9 +38,22 @@ function Seller() {
   const [sellerData, setSellerData] = React.useState<SellerData[]>([]);
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSeller, setOpenSeller] = React.useState<boolean>(false);
-  const [viewSellerData, setViewSellerData] = React.useState<
-    SellerData | string
-  >("");
+  const [viewSellerData, setViewSellerData] = React.useState<SellerData>({
+    _id: 12,
+    address: {
+      city: "",
+      country: "",
+      postalCode: "",
+      state: "",
+      street: "",
+    },
+    email: "",
+    name: "",
+    phoneNumber: "",
+    id: 12,
+    active: false,
+  });
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleCloseSeller = () => setOpenSeller(false);
@@ -123,31 +138,17 @@ function Seller() {
                   <TableCell align="right">{el.phoneNumber}</TableCell>
                   <TableCell align="right">
                     {el.active ? (
-                      <Button
-                        sx={{
-                          height: "45px",
-                          width: "120px",
-                          backgroundColor: "#74C365",
-                          color: "white",
-                          "&:hover": {
-                            backgroundColor: "lightgreen",
-                            opacity: 1,
-                          },
-                        }}
-                      >
-                        Active
-                      </Button>
+                      <Chip
+                        icon={<CheckCircleOutlineTwoToneIcon />}
+                        label="Active"
+                        sx={{ backgroundColor: "#74C365", width: "100px" }}
+                      />
                     ) : (
-                      <Button
-                        sx={{
-                          height: "45px",
-                          width: "120px",
-                          backgroundColor: "darkred",
-                          color: "white",
-                        }}
-                      >
-                        BAN
-                      </Button>
+                      <Chip
+                        icon={<CloseTwoToneIcon />}
+                        label="Not-Active"
+                        sx={{ backgroundColor: "#FF033E", width: "100px" }}
+                      />
                     )}
                   </TableCell>
                 </TableRow>
@@ -165,6 +166,7 @@ function Seller() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
+            borderRadius: "30px",
           }}
         >
           <NewSellerForm />
@@ -179,6 +181,7 @@ function Seller() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
+            borderRadius: "30px",
           }}
         >
           <ViewSeller data={viewSellerData} />

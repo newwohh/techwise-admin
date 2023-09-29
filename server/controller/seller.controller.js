@@ -64,3 +64,45 @@ exports.deleteSeller = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
+exports.banSeller = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+
+    const docToBeUpdated = await Seller.findByIdAndUpdate(
+      { _id: id },
+      { active: false }
+    );
+
+    if (docToBeUpdated) {
+      res.status(201).json({
+        success: true,
+        data: docToBeUpdated,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send(error.message);
+  }
+};
+
+exports.unbanSeller = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+
+    const docToBeUpdated = await Seller.findByIdAndUpdate(
+      { _id: id },
+      { active: true }
+    );
+
+    if (docToBeUpdated) {
+      res.status(201).json({
+        success: true,
+        data: docToBeUpdated,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send(error.message);
+  }
+};
