@@ -26,8 +26,11 @@ function WebDrawer({ children }: { children: React.ReactNode }) {
             color: "red",
           }}
         >
-          <Typography sx={{ marginLeft: "10px", fontSize: "30px" }}>
-            Welcome back <span style={{ color: "darkblue" }}>Admin</span>
+          <Typography
+            sx={{ marginLeft: "10px", fontSize: "30px", color: "lightblue" }}
+          >
+            Welcome back <span style={{ color: "darkblue" }}>Techwise</span>{" "}
+            Admin
           </Typography>
         </AppBar>
         <Drawer

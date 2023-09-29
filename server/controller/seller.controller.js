@@ -4,6 +4,12 @@ exports.getSeller = async (req, res) => {
   try {
     const sellers = await Seller.find().select("-password -__v");
 
+    if (!sellers) {
+      res.status(400).json({
+        message: "no sellers found",
+      });
+    }
+
     res.status(200).json({
       success: true,
       data: sellers,
