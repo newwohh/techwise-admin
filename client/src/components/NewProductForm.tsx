@@ -9,7 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 
-function NewProductForm({ seller }: { seller: string }) {
+interface SellerIdAndName {
+  _id: string;
+  name: string;
+}
+
+function NewProductForm({ seller }: { seller: SellerIdAndName }) {
   const [productForm, setProductForm] = React.useState({
     name: "",
     description: "",
@@ -17,8 +22,11 @@ function NewProductForm({ seller }: { seller: string }) {
     category: "",
     stock: "",
     imageUrl: "",
-    seller: seller,
+    seller: seller._id,
+    sellerName: seller.name,
   });
+
+  console.log(seller.name);
   const [messageSuccessProduct, setSuccessProduct] =
     React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -35,6 +43,7 @@ function NewProductForm({ seller }: { seller: string }) {
         stock: productForm.stock,
         imageUrl: productForm.imageUrl,
         seller: productForm.seller,
+        sellerName: productForm.sellerName,
       }
     );
 

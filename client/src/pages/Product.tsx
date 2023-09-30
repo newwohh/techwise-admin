@@ -19,6 +19,7 @@ interface Product {
   stock: number;
   imageUrl: string;
   seller: string;
+  sellerName: string;
 }
 
 function Product() {
@@ -55,6 +56,7 @@ function Product() {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align="right">Seller</TableCell>
+              <TableCell align="right">Price</TableCell>
               <TableCell align="right">Stock</TableCell>
               <TableCell align="right">Total bought</TableCell>
             </TableRow>
@@ -71,8 +73,9 @@ function Product() {
                       {el.name}
                     </Button>
                   </TableCell>
-                  <TableCell align="right">seller</TableCell>
-                  <TableCell align="right">True</TableCell>
+                  <TableCell align="right">{el.sellerName}</TableCell>
+                  <TableCell align="right">{el.price}</TableCell>
+                  <TableCell align="right">0</TableCell>
                   <TableCell align="right">0</TableCell>
                 </TableRow>
               );

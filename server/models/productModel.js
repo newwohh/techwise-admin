@@ -33,6 +33,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Image URL is required"],
   },
+  sellerName: {
+    type: String,
+    required: [true, "Seller name is required"],
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);

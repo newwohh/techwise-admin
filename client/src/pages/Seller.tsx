@@ -10,7 +10,14 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { Box, Chip } from "@mui/material";
+import {
+  Box,
+  Chip,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import NewSellerForm from "../components/NewSellerForm";
 import ViewSeller from "../components/ViewSeller";
@@ -36,10 +43,14 @@ export interface SellerData {
 }
 
 function Seller() {
+  const [age, setAge] = React.useState("");
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSeller, setOpenSeller] = React.useState<boolean>(false);
   const [openNewProduct, setOpenNewProduct] = React.useState<boolean>(false);
-  const [sellerid, setSellerid] = React.useState<string>("");
+  const [selleridandname, setSelleridAndName] = React.useState({
+    _id: "",
+    name: "",
+  });
   const [viewSellerData, setViewSellerData] = React.useState<SellerData>({
     _id: "",
     address: {
@@ -60,8 +71,11 @@ function Seller() {
   const handleClose = () => setOpen(false);
   const handleCloseSeller = () => setOpenSeller(false);
   const handleCloseNewProduct = () => setOpenNewProduct(false);
-  const handleNewProduct = (id: string) => {
-    setSellerid(id);
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
+  const handleNewProduct = (data: SellerData) => {
+    setSelleridAndName({ ...selleridandname, name: data.name, _id: data._id });
     setOpenNewProduct(true);
   };
   const fetchAllSellers = async () => {
@@ -89,25 +103,64 @@ function Seller() {
       </div>
     );
   }
+
+  const sortResults = (query: string) => {
+    if (query === "asc") {
+      data.sort((a: SellerData, b: SellerData) => a.id - b.id);
+    } else {
+      if (query === "desc") {
+        data.sort((a: SellerData, b: SellerData) => b.id - a.id);
+      }
+    }
+  };
+
   console.log(viewSellerData);
   return (
     <div>
-      <Button
-        sx={{
-          width: "180px",
-          height: "40px",
-          backgroundColor: "darkblue",
-          color: "white",
-          borderRadius: "40px",
-          fontWeight: 1000,
-          "&:hover": {
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Button
+          sx={{
+            width: "180px",
+            height: "40px",
             backgroundColor: "darkblue",
-          },
-        }}
-        onClick={handleOpen}
-      >
-        Add new seller
-      </Button>
+            color: "white",
+            borderRadius: "40px",
+            fontWeight: 1000,
+            "&:hover": {
+              backgroundColor: "darkblue",
+            },
+          }}
+          onClick={handleOpen}
+        >
+          Add new seller
+        </Button>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography sx={{ marginRight: "20px" }}>Sort by: </Typography>
+          <Select
+            id="demo-simple-select-filled"
+            value={age}
+            onChange={handleChange}
+            label="random"
+            sx={{ width: "150px" }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value="Sort by ID" onClick={() => sortResults("desc")}>
+              Sort by ID descending
+            </MenuItem>
+            <MenuItem onClick={() => sortResults("asc")}>
+              Sort by ID ascending
+            </MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </Box>
+      </Box>
       <TableContainer
         component={Paper}
         sx={{ width: "130vh", marginTop: "30px" }}
@@ -173,7 +226,7 @@ function Seller() {
                           opacity: 1,
                         },
                       }}
-                      onClick={() => handleNewProduct(el._id)}
+                      onClick={() => handleNewProduct(el)}
                     >
                       Add product
                     </Button>
@@ -226,7 +279,7 @@ function Seller() {
             borderRadius: "30px",
           }}
         >
-          <NewProductForm seller={sellerid} />
+          <NewProductForm seller={selleridandname} />
         </Box>
       </Modal>
     </div>
