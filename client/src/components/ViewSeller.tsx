@@ -27,12 +27,12 @@ function ViewSeller({ data }: { data: SellerData }) {
 
   const unbanSeller = async () => {
     setLoadingUB(true);
-    const banSellerReq = await axios.put(
+    const unbanSellerReq = await axios.put(
       "http://localhost:8000/techwise/api/seller/unban",
       { id: data._id }
     );
 
-    if (banSellerReq.data.success) {
+    if (unbanSellerReq.data.success) {
       setLoadingUB(false);
       setSuccessUnban(true);
     }
@@ -66,51 +66,58 @@ function ViewSeller({ data }: { data: SellerData }) {
           Phone: {data.phoneNumber}
         </Typography>
       </Box>
-      {data.active ? (
-        <Button
-          sx={{
-            height: "55px",
-            width: "120px",
-            backgroundColor: "#74C365",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "lightgreen",
-              opacity: 1,
-            },
-          }}
-          onClick={() => banSeller()}
-        >
-          {loading ? (
-            <CircularProgress
-              sx={{ height: "10px", width: "10px", color: "white" }}
-            />
-          ) : (
-            <Typography>{messageSuccessBan ? "Success" : "Active"}</Typography>
-          )}
-        </Button>
-      ) : (
-        <Button
-          sx={{
-            height: "55px",
-            width: "120px",
-            backgroundColor: "#FF033E",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#F88379",
-              opacity: 1,
-            },
-          }}
-          onClick={() => unbanSeller()}
-        >
-          {loadingUB ? (
-            <CircularProgress
-              sx={{ height: "10px", width: "10px", color: "white" }}
-            />
-          ) : (
-            <Typography>{messageSuccessUnban ? "Success" : "Ban"}</Typography>
-          )}
-        </Button>
-      )}
+
+      <Box
+        sx={{ display: "flex", justifyContent: "space-evenly", width: "100%" }}
+      >
+        {data.active ? (
+          <Button
+            sx={{
+              height: "55px",
+              width: "120px",
+              backgroundColor: "#74C365",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "lightgreen",
+                opacity: 1,
+              },
+            }}
+            onClick={() => banSeller()}
+          >
+            {loading ? (
+              <CircularProgress
+                sx={{ height: "10px", width: "10px", color: "white" }}
+              />
+            ) : (
+              <Typography>
+                {messageSuccessBan ? "Success" : "Active"}
+              </Typography>
+            )}
+          </Button>
+        ) : (
+          <Button
+            sx={{
+              height: "55px",
+              width: "120px",
+              backgroundColor: "#FF033E",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#F88379",
+                opacity: 1,
+              },
+            }}
+            onClick={() => unbanSeller()}
+          >
+            {loadingUB ? (
+              <CircularProgress
+                sx={{ height: "10px", width: "10px", color: "white" }}
+              />
+            ) : (
+              <Typography>{messageSuccessUnban ? "Success" : "Ban"}</Typography>
+            )}
+          </Button>
+        )}
+      </Box>
     </div>
   );
 }

@@ -6,8 +6,47 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { CircularProgress } from "@mui/material";
+
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
+  imageUrl: string;
+  seller: string;
+}
 
 function Product() {
+  const fetchAllProducts = async () => {
+    const allProductsReq = await axios.get(
+      "http://localhost:8000/techwise/api/product/all"
+    );
+
+    return allProductsReq.data.data;
+  };
+
+  const { isLoading, data } = useQuery({
+    queryKey: ["sellerdata"],
+    queryFn: () => fetchAllProducts(),
+  });
+
+  if (isLoading) {
+    return (
+      <div
+        style={{ width: "130vh", display: "flex", justifyContent: "center" }}
+      >
+        <CircularProgress sx={{ color: "darkblue" }} />
+      </div>
+    );
+  }
+
+  console.log(data);
+
   return (
     <div>
       <TableContainer component={Paper} sx={{ width: "120vh" }}>
@@ -21,18 +60,23 @@ function Product() {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <Button variant="text" sx={{ color: "darkblue" }}>
-                  name
-                </Button>
-              </TableCell>
-              <TableCell align="right">seller</TableCell>
-              <TableCell align="right">True</TableCell>
-              <TableCell align="right">0</TableCell>
-            </TableRow>
+            {data.map((el: Product, i: number) => {
+              return (
+                <TableRow
+                  key={i}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <Button variant="text" sx={{ color: "darkblue" }}>
+                      {el.name}
+                    </Button>
+                  </TableCell>
+                  <TableCell align="right">seller</TableCell>
+                  <TableCell align="right">True</TableCell>
+                  <TableCell align="right">0</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

@@ -60,24 +60,18 @@ function WebDrawer({ children }: { children: React.ReactNode }) {
                 <NavLink
                   to={`/${text}`}
                   key={index}
-                  style={{
-                    color: "black",
-                    marginBottom: "20px",
-                    textDecoration: "none",
-                  }}
-                >
-                  <Typography
-                    sx={{
+                  style={({ isActive }) => {
+                    return {
+                      color: "darkblue",
+                      marginBottom: "20px",
+                      textDecoration: isActive ? "underline" : "none",
                       fontSize: "30px",
                       transition: "ease-in-out 0.2s",
-                      color: "darkblue",
-                      "&:hover": {
-                        textDecoration: "underline",
-                      },
-                    }}
-                  >
-                    {text}
-                  </Typography>
+                      fontFamily: "Helvetica",
+                    };
+                  }}
+                >
+                  {text}
                 </NavLink>
               );
             })}

@@ -16,6 +16,7 @@ import NewSellerForm from "../components/NewSellerForm";
 import ViewSeller from "../components/ViewSeller";
 import CheckCircleOutlineTwoToneIcon from "@mui/icons-material/CheckCircleOutlineTwoTone";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import NewProductForm from "../components/NewProductForm";
 
 interface SellerAddress {
   city: string;
@@ -25,7 +26,7 @@ interface SellerAddress {
   street: string;
 }
 export interface SellerData {
-  _id: number;
+  _id: string;
   address: SellerAddress;
   email: string;
   name: string;
@@ -35,11 +36,12 @@ export interface SellerData {
 }
 
 function Seller() {
-  const [sellerData, setSellerData] = React.useState<SellerData[]>([]);
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSeller, setOpenSeller] = React.useState<boolean>(false);
+  const [openNewProduct, setOpenNewProduct] = React.useState<boolean>(false);
+  const [sellerid, setSellerid] = React.useState<string>("");
   const [viewSellerData, setViewSellerData] = React.useState<SellerData>({
-    _id: 12,
+    _id: "",
     address: {
       city: "",
       country: "",
@@ -57,14 +59,18 @@ function Seller() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleCloseSeller = () => setOpenSeller(false);
+  const handleCloseNewProduct = () => setOpenNewProduct(false);
+  const handleNewProduct = (id: string) => {
+    setSellerid(id);
+    setOpenNewProduct(true);
+  };
   const fetchAllSellers = async () => {
     const sellers = await axios.get(
       "http://localhost:8000/techwise/api/seller/all"
     );
-    setSellerData(sellers.data.data);
     return sellers.data.data;
   };
-  const { isLoading } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["sellerdata"],
     queryFn: () => fetchAllSellers(),
   });
@@ -115,10 +121,12 @@ function Seller() {
               <TableCell align="right">Phone</TableCell>
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Sales</TableCell>
+              <TableCell align="right">Total products</TableCell>
+              <TableCell align="right">Add</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sellerData.map((el, i) => {
+            {data.map((el: SellerData, i: number) => {
               return (
                 <TableRow
                   key={i}
@@ -150,6 +158,25 @@ function Seller() {
                         sx={{ backgroundColor: "#FF033E", width: "100px" }}
                       />
                     )}
+                  </TableCell>
+                  <TableCell align="center">0</TableCell>
+                  <TableCell align="center">0</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      sx={{
+                        height: "30px",
+                        width: "150px",
+                        backgroundColor: "#3457D5",
+                        color: "white",
+                        "&:hover": {
+                          backgroundColor: "lightgreen",
+                          opacity: 1,
+                        },
+                      }}
+                      onClick={() => handleNewProduct(el._id)}
+                    >
+                      Add product
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
@@ -185,6 +212,21 @@ function Seller() {
           }}
         >
           <ViewSeller data={viewSellerData} />
+        </Box>
+      </Modal>
+      <Modal open={openNewProduct} onClose={handleCloseNewProduct}>
+        <Box
+          sx={{
+            backgroundColor: "white",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 800,
+            borderRadius: "30px",
+          }}
+        >
+          <NewProductForm seller={sellerid} />
         </Box>
       </Modal>
     </div>
