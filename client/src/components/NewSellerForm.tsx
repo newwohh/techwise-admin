@@ -1,8 +1,18 @@
 import React from "react";
-import { Box, Button, Input } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Input,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 
 function NewSellerForm() {
+  const [message, setMessage] = React.useState<string>("");
+  const [messageSuccessProduct, setSuccessProduct] =
+    React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [sellerFormData, setSellerFormData] = React.useState({
     name: "",
     email: "",
@@ -16,24 +26,42 @@ function NewSellerForm() {
   });
 
   const addNewSeller = async () => {
-    const data = await axios.post(
-      "http://localhost:8000/techwise/api/seller/new",
-      {
-        name: sellerFormData.name,
-        email: sellerFormData.email,
-        password: sellerFormData.password,
-        phoneNumber: sellerFormData.password,
-        address: {
-          street: sellerFormData.street,
-          city: sellerFormData.city,
-          state: sellerFormData.state,
-          postalCode: sellerFormData.postalCode,
-          country: sellerFormData.country,
-        },
-      }
-    );
+    setLoading(true);
 
-    console.log(data);
+    try {
+      const data = await axios.post(
+        "http://localhost:8000/techwise/api/seller/new",
+        {
+          name: sellerFormData.name,
+          email: sellerFormData.email,
+          password: sellerFormData.password,
+          phoneNumber: sellerFormData.password,
+          address: {
+            street: sellerFormData.street,
+            city: sellerFormData.city,
+            state: sellerFormData.state,
+            postalCode: sellerFormData.postalCode,
+            country: sellerFormData.country,
+          },
+        }
+      );
+      if (data.data.success) {
+        setLoading(false);
+        setSuccessProduct(true);
+        setMessage("Success");
+        console.log(message);
+      } else {
+        setLoading(false);
+        setMessage("Failed");
+        setSuccessProduct(true);
+        console.log(message);
+      }
+    } catch (error) {
+      setLoading(false);
+      setMessage("Failed");
+      setSuccessProduct(true);
+      console.log(message);
+    }
   };
 
   return (
@@ -141,7 +169,15 @@ function NewSellerForm() {
         }}
         onClick={addNewSeller}
       >
-        Add
+        {loading ? (
+          <CircularProgress
+            sx={{ height: "10px", width: "10px", color: "white" }}
+          />
+        ) : (
+          <Typography>
+            {messageSuccessProduct ? `${message}` : "Add"}
+          </Typography>
+        )}
       </Button>
     </div>
   );

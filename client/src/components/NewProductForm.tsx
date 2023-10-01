@@ -9,12 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 
-interface SellerIdAndName {
+export interface SellerIdAndName {
   _id: string;
   name: string;
 }
 
 function NewProductForm({ seller }: { seller: SellerIdAndName }) {
+  const [message, setMessage] = React.useState<string>("");
   const [productForm, setProductForm] = React.useState({
     name: "",
     description: "",
@@ -33,26 +34,40 @@ function NewProductForm({ seller }: { seller: SellerIdAndName }) {
 
   const addNewProduct = async () => {
     setLoading(true);
-    const addNewProductReq = await axios.post(
-      "http://localhost:8000/techwise/api/product/new",
-      {
-        name: productForm.name,
-        description: productForm.description,
-        price: productForm.price,
-        category: productForm.category,
-        stock: productForm.stock,
-        imageUrl: productForm.imageUrl,
-        seller: productForm.seller,
-        sellerName: productForm.sellerName,
-      }
-    );
+    try {
+      const addNewProductReq = await axios.post(
+        "http://localhost:8000/techwise/api/product/new",
+        {
+          name: productForm.name,
+          description: productForm.description,
+          price: productForm.price,
+          category: productForm.category,
+          stock: productForm.stock,
+          imageUrl: productForm.imageUrl,
+          seller: productForm.seller,
+          sellerName: productForm.sellerName,
+        }
+      );
 
-    if (addNewProductReq.data.success) {
+      if (addNewProductReq.data.success) {
+        setLoading(false);
+        setSuccessProduct(true);
+        setMessage("Success");
+        console.log(message);
+      } else {
+        setLoading(false);
+        setMessage("Failed");
+        setSuccessProduct(true);
+        console.log(message);
+      }
+    } catch (error) {
       setLoading(false);
+      setMessage("Failed");
       setSuccessProduct(true);
+      console.log(message);
     }
   };
-  console.log(seller);
+  console.log(seller, message);
 
   return (
     <div
@@ -152,7 +167,9 @@ function NewProductForm({ seller }: { seller: SellerIdAndName }) {
               sx={{ height: "10px", width: "10px", color: "white" }}
             />
           ) : (
-            <Typography>{messageSuccessProduct ? "Success" : "Add"}</Typography>
+            <Typography>
+              {messageSuccessProduct ? `${message}` : "Add"}
+            </Typography>
           )}
         </Button>
       </Box>

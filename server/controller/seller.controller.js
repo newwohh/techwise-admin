@@ -106,3 +106,30 @@ exports.unbanSeller = async (req, res, next) => {
     res.status(500).send(error.message);
   }
 };
+
+exports.getSellerStats = async (req, res, next) => {
+  try {
+    const stats = await Seller.aggregate([
+      {
+        $group: {
+          _id: "$active",
+          sellers: { $push: "$$ROOT" },
+        },
+      },
+    ]);
+
+    if (stats) {
+      res.status(200).json({
+        message: "success",
+        data: stats,
+      });
+    } else if (!stats) {
+      res.status(400).json({
+        message: "no stats found",
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send(error.message);
+  }
+};

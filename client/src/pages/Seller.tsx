@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -23,7 +23,7 @@ import NewSellerForm from "../components/NewSellerForm";
 import ViewSeller from "../components/ViewSeller";
 import CheckCircleOutlineTwoToneIcon from "@mui/icons-material/CheckCircleOutlineTwoTone";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import NewProductForm from "../components/NewProductForm";
+import NewProductForm, { SellerIdAndName } from "../components/NewProductForm";
 
 interface SellerAddress {
   city: string;
@@ -43,14 +43,16 @@ export interface SellerData {
 }
 
 function Seller() {
-  const [age, setAge] = React.useState("");
+  const [age, setAge] = React.useState<string>("");
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSeller, setOpenSeller] = React.useState<boolean>(false);
   const [openNewProduct, setOpenNewProduct] = React.useState<boolean>(false);
-  const [selleridandname, setSelleridAndName] = React.useState({
-    _id: "",
-    name: "",
-  });
+  const [selleridandname, setSelleridAndName] = React.useState<SellerIdAndName>(
+    {
+      _id: "",
+      name: "",
+    }
+  );
   const [viewSellerData, setViewSellerData] = React.useState<SellerData>({
     _id: "",
     address: {
@@ -67,19 +69,19 @@ function Seller() {
     active: false,
   });
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleCloseSeller = () => setOpenSeller(false);
-  const handleCloseNewProduct = () => setOpenNewProduct(false);
+  const handleOpen = (): void => setOpen(true);
+  const handleClose = (): void => setOpen(false);
+  const handleCloseSeller = (): void => setOpenSeller(false);
+  const handleCloseNewProduct = (): void => setOpenNewProduct(false);
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+    setAge(event.target.value as string);
   };
   const handleNewProduct = (data: SellerData) => {
     setSelleridAndName({ ...selleridandname, name: data.name, _id: data._id });
     setOpenNewProduct(true);
   };
   const fetchAllSellers = async () => {
-    const sellers = await axios.get(
+    const sellers: AxiosResponse = await axios.get(
       "http://localhost:8000/techwise/api/seller/all"
     );
     return sellers.data.data;
@@ -89,7 +91,7 @@ function Seller() {
     queryFn: () => fetchAllSellers(),
   });
 
-  const handleSellerView = (el: SellerData) => {
+  const handleSellerView = (el: SellerData): void => {
     setOpenSeller(true);
     setViewSellerData(el);
   };
@@ -104,7 +106,7 @@ function Seller() {
     );
   }
 
-  const sortResults = (query: string) => {
+  const sortResults = (query: string): void => {
     if (query === "asc") {
       data.sort((a: SellerData, b: SellerData) => a.id - b.id);
     } else {
