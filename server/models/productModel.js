@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const connect = require("../db/connection");
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -91,6 +92,10 @@ const productSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  totalSold: {
+    type: Number,
+    default: 0,
+  },
 });
 
 productSchema.virtual("averageRating").get(function () {

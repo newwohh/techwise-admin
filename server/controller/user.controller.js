@@ -4,7 +4,7 @@ exports.getUserDocuments = async (req, res) => {
   try {
     const params = req.params;
     console.log(params);
-    const users = await connect();
+    const { users } = await connect();
 
     const documents = await users.find({}).toArray();
 

@@ -1,3 +1,4 @@
+const connect = require("../db/connection");
 const Product = require("../models/productModel");
 const Seller = require("../models/sellerModel");
 

@@ -17,7 +17,8 @@ async function connect() {
     console.log("Connected to MongoDB Client");
 
     const collection = db.collection("users");
-    return collection;
+    const ordercollection = db.collection("orders");
+    return { users: collection, orders: ordercollection };
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
     throw error;
