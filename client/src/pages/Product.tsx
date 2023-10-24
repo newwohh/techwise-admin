@@ -67,7 +67,7 @@ function Product() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((el: Product, i: number) => {
+            {data?.map((el: Product, i: number) => {
               return (
                 <TableRow
                   key={i}
@@ -80,7 +80,7 @@ function Product() {
                   </TableCell>
                   <TableCell align="right">{el.seller.name}</TableCell>
                   <TableCell align="right">{el.price}</TableCell>
-                  <TableCell align="right">0</TableCell>
+                  <TableCell align="right">{el.stock}</TableCell>
                   <TableCell align="right">0</TableCell>
                 </TableRow>
               );
