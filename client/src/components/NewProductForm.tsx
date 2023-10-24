@@ -15,14 +15,24 @@ export interface SellerIdAndName {
 }
 
 function NewProductForm({ seller }: { seller: SellerIdAndName }) {
+  const [imageUrls, setImageUrls] = React.useState(["", "", "", "", ""]);
   const [message, setMessage] = React.useState<string>("");
   const [productForm, setProductForm] = React.useState({
     name: "",
     description: "",
     price: "",
     category: "",
+    brand: "",
+    screenSize: "",
+    processor: "",
+    storageCapacityGB: "",
+    RAMGB: "",
+    cameraMP: "",
+    operatingSystem: "",
+    color: "",
+    reviews: [],
     stock: "",
-    imageUrl: "",
+    images: [] as string[],
     seller: seller._id,
     sellerName: seller.name,
   });
@@ -35,18 +45,11 @@ function NewProductForm({ seller }: { seller: SellerIdAndName }) {
   const addNewProduct = async () => {
     setLoading(true);
     try {
+      addImageUrls();
+
       const addNewProductReq = await axios.post(
         "http://localhost:8000/techwise/api/product/new",
-        {
-          name: productForm.name,
-          description: productForm.description,
-          price: productForm.price,
-          category: productForm.category,
-          stock: productForm.stock,
-          imageUrl: productForm.imageUrl,
-          seller: productForm.seller,
-          sellerName: productForm.sellerName,
-        }
+        productForm
       );
 
       if (addNewProductReq.data.success) {
@@ -69,6 +72,20 @@ function NewProductForm({ seller }: { seller: SellerIdAndName }) {
   };
   console.log(seller, message);
 
+  const updateImageUrl = (url: string, index: number) => {
+    const updatedUrls = [...imageUrls];
+    updatedUrls[index] = url;
+    setImageUrls(updatedUrls);
+  };
+
+  const addImageUrls = () => {
+    const validUrls = imageUrls.filter((url) => url.trim() !== "");
+    setProductForm({
+      ...productForm,
+      images: validUrls,
+    });
+  };
+
   return (
     <div
       style={{
@@ -82,70 +99,163 @@ function NewProductForm({ seller }: { seller: SellerIdAndName }) {
     >
       <Typography variant="h4">Add New Product</Typography>
       <Box>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Input
-            placeholder="Name"
-            sx={{ width: "250px", marginTop: "40px" }}
-            onChange={(e) =>
-              setProductForm({
-                ...productForm,
-                name: e.target.value,
-              })
-            }
-          />
-          <TextField
-            id="filled-multiline-static"
-            label="Description"
-            multiline
-            rows={4}
-            sx={{ width: "350px", marginTop: "40px" }}
-            onChange={(e) =>
-              setProductForm({
-                ...productForm,
-                description: e.target.value,
-              })
-            }
-          />
-          <Input
-            placeholder="Price"
-            sx={{ width: "350px", marginTop: "40px" }}
-            onChange={(e) =>
-              setProductForm({
-                ...productForm,
-                price: e.target.value,
-              })
-            }
-          />
-          <Input
-            placeholder="Category"
-            sx={{ width: "350px", marginTop: "40px" }}
-            onChange={(e) =>
-              setProductForm({
-                ...productForm,
-                category: e.target.value,
-              })
-            }
-          />
-          <Input
-            placeholder="Stock"
-            sx={{ width: "350px", marginTop: "40px" }}
-            onChange={(e) =>
-              setProductForm({
-                ...productForm,
-                stock: e.target.value,
-              })
-            }
-          />
-          <Input
-            placeholder="Image"
-            sx={{ width: "350px", marginTop: "40px" }}
-            onChange={(e) =>
-              setProductForm({
-                ...productForm,
-                imageUrl: e.target.value,
-              })
-            }
-          />
+        <Box
+          sx={{
+            width: "900px",
+            display: "flex",
+            flexDirection: "row",
+            rowGap: "30px",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <Input
+              placeholder="Name"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  name: e.target.value,
+                })
+              }
+            />
+            <TextField
+              id="filled-multiline-static"
+              label="Description"
+              multiline
+              rows={4}
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  description: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Price"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  price: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Category"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  category: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Stock"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  stock: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Brand"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  brand: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Screen size"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  screenSize: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div>
+            <Input
+              placeholder="Processor"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  processor: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Storage Capacity"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  storageCapacityGB: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Ram"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  RAMGB: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Camera"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  cameraMP: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Operating System"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  operatingSystem: e.target.value,
+                })
+              }
+            />
+            <Input
+              placeholder="Color"
+              sx={{ width: "350px", marginTop: "40px" }}
+              onChange={(e) =>
+                setProductForm({
+                  ...productForm,
+                  color: e.target.value,
+                })
+              }
+            />
+
+            {imageUrls.map((url, index) => (
+              <div key={index}>
+                <Input
+                  placeholder={`Image URL ${index + 1}`}
+                  sx={{ width: "350px", marginTop: "40px" }}
+                  value={url}
+                  onChange={(e) => updateImageUrl(e.target.value, index)}
+                />
+              </div>
+            ))}
+          </div>
         </Box>
         <Button
           sx={{

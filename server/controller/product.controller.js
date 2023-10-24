@@ -1,14 +1,22 @@
 const Product = require("../models/productModel");
+const Seller = require("../models/sellerModel");
 
 exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const productDocuments = await Product.find().populate("seller", "name");
 
-    res.status(200).json({
-      success: true,
-      data: products,
-    });
+    if (productDocuments) {
+      res.status(200).json({
+        success: true,
+        data: productDocuments,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+      });
+    }
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({
       success: false,
     });
@@ -18,13 +26,22 @@ exports.getProducts = async (req, res) => {
 exports.createProduct = async (req, res) => {
   try {
     const newProductData = req.body;
-
     const newProduct = await Product.create(newProductData);
 
-    res.status(201).json({
-      success: true,
-      data: newProduct,
-    });
+    if (newProduct) {
+      const seller = await Seller.findOne({ _id: newProductData.seller });
+      seller.totalProducts += 1;
+      await seller.save();
+
+      res.status(201).json({
+        success: true,
+        data: newProduct,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+      });
+    }
   } catch (error) {
     console.log(error.message);
     res.status(500).json({

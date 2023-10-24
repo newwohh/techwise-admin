@@ -18,7 +18,10 @@ interface Product {
   category: string;
   stock: number;
   imageUrl: string;
-  seller: string;
+  seller: {
+    id?: string;
+    name: string;
+  };
   sellerName: string;
 }
 
@@ -27,6 +30,8 @@ function Product() {
     const allProductsReq = await axios.get(
       "http://localhost:8000/techwise/api/product/all"
     );
+
+    console.log(allProductsReq.data);
 
     return allProductsReq.data.data;
   };
@@ -73,7 +78,7 @@ function Product() {
                       {el.name}
                     </Button>
                   </TableCell>
-                  <TableCell align="right">{el.sellerName}</TableCell>
+                  <TableCell align="right">{el.seller.name}</TableCell>
                   <TableCell align="right">{el.price}</TableCell>
                   <TableCell align="right">0</TableCell>
                   <TableCell align="right">0</TableCell>

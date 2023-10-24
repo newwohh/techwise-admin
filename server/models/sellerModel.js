@@ -18,7 +18,7 @@ const sellerSchema = new mongoose.Schema({
     unique: true,
   },
   phoneNumber: {
-    type: String,
+    type: Number,
     required: [true, "Phone number is required"],
   },
   address: {
@@ -32,18 +32,21 @@ const sellerSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  totalProducts: {
+    type: Number,
+    default: 0,
+  },
 });
 
 sellerSchema.pre("save", async function (next) {
   if (!this.isNew) {
     return next();
   }
-
   const maxIdSeller = await this.constructor.findOne({}, { id: 1 }).sort({
     id: -1,
   });
-
   this.id = maxIdSeller ? maxIdSeller.id + 1 : 0;
+  this.totalProducts = 0;
 
   next();
 });

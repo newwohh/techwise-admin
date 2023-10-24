@@ -3,16 +3,15 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: "./config/config.env" });
 
-const DBUrl = process.env.DATABASE_URL.replace(
-  "<password>",
-  process.env.DATABASE_PASSWORD
-);
+const DBUrl =
+  "mongodb+srv://nevoznvx:f5ZXQ8qVuALrhW2D@cluster0.xel6yxj.mongodb.net/techwise";
 
 db = () =>
   mongoose
     .connect(DBUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      authSource: "admin",
     })
     .then(() => {
       console.log("Connected to MongoDB");

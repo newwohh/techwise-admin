@@ -40,6 +40,7 @@ export interface SellerData {
   phoneNumber: string;
   id: number;
   active: boolean;
+  totalProducts: number;
 }
 
 function Seller() {
@@ -67,6 +68,7 @@ function Seller() {
     phoneNumber: "",
     id: 12,
     active: false,
+    totalProducts: 0,
   });
 
   const handleOpen = (): void => setOpen(true);
@@ -215,7 +217,7 @@ function Seller() {
                     )}
                   </TableCell>
                   <TableCell align="center">0</TableCell>
-                  <TableCell align="center">0</TableCell>
+                  <TableCell align="center">{el.totalProducts}</TableCell>
                   <TableCell align="right">
                     <Button
                       sx={{
@@ -277,7 +279,7 @@ function Seller() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 800,
+            width: 900,
             borderRadius: "30px",
           }}
         >
