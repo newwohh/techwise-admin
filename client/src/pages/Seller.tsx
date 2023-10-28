@@ -219,21 +219,39 @@ function Seller() {
                   <TableCell align="center">0</TableCell>
                   <TableCell align="center">{el.totalProducts}</TableCell>
                   <TableCell align="right">
-                    <Button
-                      sx={{
-                        height: "30px",
-                        width: "150px",
-                        backgroundColor: "#3457D5",
-                        color: "white",
-                        "&:hover": {
-                          backgroundColor: "lightgreen",
-                          opacity: 1,
-                        },
-                      }}
-                      onClick={() => handleNewProduct(el)}
-                    >
-                      Add product
-                    </Button>
+                    {el.active ? (
+                      <Button
+                        sx={{
+                          height: "30px",
+                          width: "150px",
+                          backgroundColor: "#3457D5",
+                          color: "white",
+                          "&:hover": {
+                            backgroundColor: "lightgreen",
+                            opacity: 1,
+                          },
+                        }}
+                        onClick={() => handleNewProduct(el)}
+                      >
+                        Add product
+                      </Button>
+                    ) : (
+                      <Button
+                        disabled
+                        sx={{
+                          height: "30px",
+                          width: "150px",
+                          backgroundColor: "lightgrey",
+                          color: "white",
+                          "&:hover": {
+                            backgroundColor: "lightgreen",
+                            opacity: 1,
+                          },
+                        }}
+                      >
+                        Add product
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               );

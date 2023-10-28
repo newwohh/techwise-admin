@@ -26,19 +26,25 @@ exports.getProducts = async (req, res) => {
 exports.createProduct = async (req, res) => {
   try {
     const newProductData = req.body;
-    const newProduct = await Product.create(newProductData);
+    const seller = await Seller.findOne({ _id: newProductData.seller });
 
-    if (newProduct) {
-      const seller = await Seller.findOne({ _id: newProductData.seller });
-      seller.totalProducts += 1;
-      await seller.save();
+    if (seller) {
+      if (seller.active) {
+        const newProduct = await Product.create(newProductData);
+        seller.totalProducts += 1;
+        await seller.save();
 
-      res.status(201).json({
-        success: true,
-        data: newProduct,
-      });
+        res.status(201).json({
+          success: true,
+          data: newProduct,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+        });
+      }
     } else {
-      res.status(500).json({
+      res.status(404).json({
         success: false,
       });
     }

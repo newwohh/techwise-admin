@@ -64,6 +64,7 @@ function NewProductForm({ seller }: { seller: SellerIdAndName }) {
         console.log(message);
       }
     } catch (error) {
+      alert("oops");
       setLoading(false);
       setMessage("Failed");
       setSuccessProduct(true);
