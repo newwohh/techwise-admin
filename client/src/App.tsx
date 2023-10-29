@@ -10,7 +10,7 @@ function App() {
     <>
       <WebDrawer>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" index element={<Home />} />
           <Route path="/products" element={<Product />} />
           <Route path="/users" element={<User />} />
           <Route path="/sellers" element={<Seller />} />
