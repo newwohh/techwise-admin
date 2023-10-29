@@ -9,6 +9,13 @@ import Divider from "@mui/material/Divider";
 import { NavLink } from "react-router-dom";
 const drawerWidth = 240;
 
+const drawerLinks = [
+  { title: "Home", link: "/" },
+  { title: "Products", link: "/Products" },
+  { title: "Sellers", link: "/sellers" },
+  { title: "Users", link: "/users" },
+];
+
 function WebDrawer({ children }: { children: React.ReactNode }) {
   return (
     <div>
@@ -55,10 +62,10 @@ function WebDrawer({ children }: { children: React.ReactNode }) {
               marginLeft: "30px",
             }}
           >
-            {["Inbox", "Sellers", "Users", "Products"].map((text, index) => {
+            {drawerLinks.map((text, index) => {
               return (
                 <NavLink
-                  to={`/${text}`}
+                  to={`${text.link}`}
                   key={index}
                   style={({ isActive }) => {
                     return {
@@ -71,7 +78,7 @@ function WebDrawer({ children }: { children: React.ReactNode }) {
                     };
                   }}
                 >
-                  {text}
+                  {text.title}
                 </NavLink>
               );
             })}
